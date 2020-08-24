@@ -1,0 +1,27 @@
+version: "3"
+volumes:
+  bundle:       { driver: local }
+services:
+  app:
+    build: 
+      context: ./
+    image: app:latest
+    volumes:
+      - .:/app
+      - bundle:/bundle
+  guard:
+    build: 
+      context: ./
+    command: bundle exec guard --no-bundler-warning --no-interactions
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/app
+      - bundle:/bundle
+  rspec: 
+    build: 
+      context: ./
+    command: bundle exec rspec --require spec_helper
+    volumes:
+      - .:/app
+      - bundle:/bundle
